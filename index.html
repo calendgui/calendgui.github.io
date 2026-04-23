@@ -1,86 +1,13 @@
-<!DOCTYPE html>
-<html lang="es">
-<head>
-  <meta charset="UTF-8">
-  <title>Test Auth</title>
-</head>
-<body>
-  <h2>Test Backend Auth</h2>
-
-  <button id="btnLogin">Login con Google</button>
-  <button id="btnLogout" style="display:none">Logout</button>
-
-  <hr>
-
-  <button id="btnMe" style="display:none">GET /users/me</button>
-  <button id="btnProtected" style="display:none">GET /protected</button>
-
-  <pre id="output"></pre>
-
-<script type="module">
-  import { initializeApp } from 'https://www.gstatic.com/firebasejs/10.12.0/firebase-app.js'
-  import { getAuth, GoogleAuthProvider, signInWithPopup, signOut, onAuthStateChanged }
-    from 'https://www.gstatic.com/firebasejs/10.12.0/firebase-auth.js'
-
-  const firebaseConfig = {
-    apiKey:     'AIzaSyCEsQAEZ0V7Xu96r9zyVS7RCBI2SFkeils',
-    authDomain: 'calendgui-v2.firebaseapp.com',
-    projectId:  'calendgui-v2',
-  }
-
-  const app      = initializeApp(firebaseConfig)
-  const auth     = getAuth(app)
-  const provider = new GoogleAuthProvider()
-
-  const output       = document.getElementById('output')
-  const btnLogin     = document.getElementById('btnLogin')
-  const btnLogout    = document.getElementById('btnLogout')
-  const btnMe        = document.getElementById('btnMe')
-  const btnProtected = document.getElementById('btnProtected')
-
-  const BASE = 'http://localhost:3000'
-
-  async function fetchConToken(url) {
-    const token = await auth.currentUser.getIdToken()
-    const res   = await fetch(BASE + url, {
-      headers: { Authorization: `Bearer ${token}` }
-    })
-    return res.json()
-  }
-
-  onAuthStateChanged(auth, user => {
-    if (user) {
-      btnLogin.style.display     = 'none'
-      btnLogout.style.display    = 'inline'
-      btnMe.style.display        = 'inline'
-      btnProtected.style.display = 'inline'
-      output.textContent = `Logueado como: ${user.email}`
-    } else {
-      btnLogin.style.display     = 'inline'
-      btnLogout.style.display    = 'none'
-      btnMe.style.display        = 'none'
-      btnProtected.style.display = 'none'
-      output.textContent = 'Sin sesión'
-    }
-  })
-
-  btnLogin.addEventListener('click', async () => {
-    const result = await signInWithPopup(auth, provider)
-    const token  = await result.user.getIdToken()
-    output.textContent = token  // copiás para Postman
-  })
-
-  btnLogout.addEventListener('click', () => signOut(auth))
-
-  btnMe.addEventListener('click', async () => {
-    const data = await fetchConToken('/users/me')
-    output.textContent = JSON.stringify(data, null, 2)
-  })
-
-  btnProtected.addEventListener('click', async () => {
-    const data = await fetchConToken('/protected')
-    output.textContent = JSON.stringify(data, null, 2)
-  })
-</script>
-</body>
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>calendgui.github.io</title>
+  </head>
+  <body>
+    <div id="root"></div>
+    <script type="module" src="/src/main.tsx"></script>
+  </body>
 </html>
