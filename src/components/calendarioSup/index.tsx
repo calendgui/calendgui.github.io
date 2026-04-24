@@ -17,6 +17,26 @@ interface Props {
   onSemanaCambia: (desde: string, hasta: string) => void
 }
 
+function calcularColumnas(slots: Slot[]) {
+  const resultado = new Map<string, { col: number; total: number }>()
+  
+  // agrupar por fecha+hora
+  const grupos = new Map<string, Slot[]>()
+  slots.forEach(slot => {
+    const key = `${slot.fecha}-${slot.hora}`
+    if (!grupos.has(key)) grupos.set(key, [])
+    grupos.get(key)!.push(slot)
+  })
+
+  grupos.forEach(grupo => {
+    grupo.forEach((slot, i) => {
+      resultado.set(slot.id, { col: i, total: grupo.length })
+    })
+  })
+
+  return resultado
+}
+
 function toFechaStr(date: Date) {
   return `${date.getFullYear()}-${String(date.getMonth() + 1).padStart(2, '0')}-${String(date.getDate()).padStart(2, '0')}`
 }
@@ -96,7 +116,7 @@ export function CalendarioSup({ slots, spots, spotsVisibles, onCeldaClick, onSlo
               s.fecha === fechaStr &&
               (spotsVisibles.size === 0 || spotsVisibles.has(s.id_spot))
             )
-
+            const columnas = calcularColumnas(slotsDia)
             return (
               <div
                 key={fechaStr}
@@ -110,17 +130,21 @@ export function CalendarioSup({ slots, spots, spotsVisibles, onCeldaClick, onSlo
                 ))}
 
                 {/* slots */}
+                
+
                 {slotsDia.map(slot => {
                   const spot = spots.find(s => s.id === slot.id_spot)
                   const top = horaAMinutos(slot.hora) / 60 * HORA_HEIGHT
                   const height = ((slot.duracion ?? 60) / 60) * HORA_HEIGHT
-                  console.log(slot.hora, horaAMinutos(slot.hora), (horaAMinutos(slot.hora) / 60) * HORA_HEIGHT)
+                  const { col, total } = columnas.get(slot.id) ?? { col: 0, total: 1 }
+                  const width = `calc((100% - 4px) / ${total})`
+                  const left = `calc(${col} * (100% - 4px) / ${total} + 2px)`
 
                   return (
                     <div
                       key={slot.id}
                       className={`cal-sup-chip ${slot.estado ? 'cal-sup-chip--ocupado' : 'cal-sup-chip--libre'}`}
-                      style={{ top, height, background: spot?.color ?? '#94a3b8' }}
+                      style={{ top, height, width, left, background: spot?.color ?? '#94a3b8' }}
                       onClick={(e) => { e.stopPropagation(); onSlotClick(slot) }}
                     >
                       <span className="cal-sup-chip-hora">{slot.hora}</span>

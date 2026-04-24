@@ -122,7 +122,6 @@
 /* chips */
 .cal-sup-chip {
   position: absolute;
-  left: 2px; right: 2px;
   border-radius: 4px; 
   padding: .2rem .4rem;
   cursor: pointer;

@@ -1,6 +1,6 @@
 import { auth } from '../config/firebase'
 
-const BASE = import.meta.env.VITE_API_URL // ej: http://localhost:3000
+const BASE = import.meta.env.VITE_API_URL
 
 async function getToken(): Promise<string> {
   const user = auth.currentUser

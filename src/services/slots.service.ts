@@ -1,4 +1,5 @@
 import { apiFetch } from './api'
+import type { Slot, CrearSlotDTO } from '../types'
 
 export const slotsService = {
   getPorMes: (anho: number, mes: number) =>
@@ -10,8 +11,8 @@ export const slotsService = {
   crear: (data: CrearSlotDTO) =>
     apiFetch<Slot>('/slots', { method: 'POST', body: JSON.stringify(data) }),
 
-  crearRango: (data: CrearRangoDTO) =>
-    apiFetch<Slot[]>('/slots/rango', { method: 'POST', body: JSON.stringify(data) }),
+  // crearRango: (data: CrearRangoDTO) =>
+  //   apiFetch<Slot[]>('/slots/rango', { method: 'POST', body: JSON.stringify(data) }),
 
   eliminar: (id: string) =>
     apiFetch<void>(`/slots/${id}`, { method: 'DELETE' }),

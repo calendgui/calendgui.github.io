@@ -17,6 +17,17 @@ export interface Slot {
   evento_id: string | null
 }
 
+export interface CrearSlotDTO {
+  
+}
+
+export interface SlotType {
+  id: string
+  nombre: string
+  duracion: number
+}
+
+
 export interface Spot {
   id: string
   nombre: string
