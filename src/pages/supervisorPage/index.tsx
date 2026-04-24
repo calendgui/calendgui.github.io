@@ -9,7 +9,7 @@ import type { Slot, Spot, SlotType } from '../../types'
 
 import './styles.css'
 
-export function SupervisorPage({ auth }: any) {
+export function SupervisorPage({ auth, mostrarToast }: any) {
   console.log(auth)
   const [slots, setSlots]               = useState<Slot[]>([])
   const [spots, setSpots]               = useState<Spot[]>([])
@@ -55,9 +55,14 @@ export function SupervisorPage({ auth }: any) {
         slotTypes={slotTypes}
         onClose={() => setModal(null)}
         onConfirm={async (data) => {
-          await slotsService.crear(data)
-          setModal(null)
-          cargarSlots(semanaDesde)
+          try {
+            await slotsService.crear(data)
+            setModal(null)
+            mostrarToast('Slot creado')
+            cargarSlots(semanaDesde)
+          } catch (e: any) {
+            mostrarToast(e.message, 'error')
+          }
         }}
       />
 

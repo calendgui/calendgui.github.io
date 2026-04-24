@@ -21,6 +21,9 @@ export async function apiFetch<T>(
       ...options.headers,
     },
   })
-  if (!res.ok) throw new Error(`API error ${res.status}`)
+  if (!res.ok) {
+    const err = await res.json()
+    throw new Error(err.error ?? `API error ${res.status}`)
+  }
   return res.json()
 }

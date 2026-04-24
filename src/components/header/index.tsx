@@ -22,27 +22,41 @@ export function Header({ auth }: Props) {
       {menuOpen && <div className="nav-backdrop" onClick={() => setMenuOpen(false)} />}
 
       <div className={`nav-menu ${menuOpen ? 'open' : ''}`}>
+
         <div className="nav-menu-header">
           <span className="nav-menu-titulo">Menú</span>
           <button className="nav-menu-close" onClick={() => setMenuOpen(false)}>✕</button>
         </div>
 
-        {user && (
-          <div className="nav-menu-user">
-            <img src={user.foto} alt={user.nombre} className="nav-menu-avatar" referrerPolicy="no-referrer" />
-            <div>
-              <p className="nav-menu-nombre">{user.nombre}</p>
-              <p className="nav-menu-email">{user.email}</p>
-            </div>
-          </div>
-        )}
+        <div className="nav-menu-body">
+          {user && (
+            <>
+              <div className="nav-menu-user">
+                <img src={user.foto} alt={user.nombre} className="nav-menu-avatar" referrerPolicy="no-referrer" />
+                <div>
+                  <p className="nav-menu-nombre">{user.nombre}</p>
+                  <p className="nav-menu-email">{user.email}</p>
+                </div>
+              </div>
+              <hr className="nav-menu-divider" />
+              <button className="nav-menu-item" onClick={() => setMenuOpen(false)}>Mis reservas</button>
+              {(user.rol === 2 || user.rol === 3) && (
+                <>
+                  <button className="nav-menu-item" onClick={() => setMenuOpen(false)}>Crear rango</button>
+                  <button className="nav-menu-item" onClick={() => setMenuOpen(false)}>Mi configuración</button>
+                </>
+              )}
+            </>
+          )}
+        </div>
 
-        <hr className="nav-menu-divider" />
+        <div className="nav-menu-footer">
+          {!user
+            ? <button className="nav-menu-item" onClick={() => { login(); setMenuOpen(false) }}>Iniciar sesión con Google</button>
+            : <button className="nav-menu-item nav-menu-item-danger" onClick={() => { logout(); setMenuOpen(false) }}>Cerrar sesión</button>
+          }
+        </div>
 
-        {!user
-          ? <button className="nav-menu-item" onClick={() => { login(); setMenuOpen(false) }}>Iniciar sesión con Google</button>
-          : <button className="nav-menu-item nav-menu-item-danger" onClick={() => { logout(); setMenuOpen(false) }}>Cerrar sesión</button>
-        }
       </div>
     </nav>
   )
