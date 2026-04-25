@@ -5,23 +5,45 @@ import { HomePage } from './pages/HomePage/index.tsx'
 import { ParticipantePage } from './pages/participantePage/index.tsx'
 import { SupervisorPage } from './pages/supervisorPage/index.tsx'
 import { Toast } from './components/toast/index.tsx'
+import { ModalUserConfig } from './components/modalUserConfig/index.tsx'
+import { userConfigService } from './services/userConfig.service.ts'
+import type { UserConfig } from './types/index.ts'
 
 export default function App() {
   const auth = useAuth()
   const [toast, setToast] = useState<{ mensaje: string; tipo: 'ok' | 'error' } | null>(null)
+  const [modalRango, setModalRango] = useState(false)
+  const [modalConfig, setModalConfig] = useState(false)
+  const [config, setConfig] = useState<UserConfig | null>(null)
 
   const mostrarToast = (mensaje: string, tipo: 'ok' | 'error' = 'ok') => {
     setToast({ mensaje, tipo })
+  }
+
+  const abrirConfig = async () => {
+    try {
+      const data = await userConfigService.getMe()
+      setConfig(data)
+    } catch {
+      setConfig(null)
+    }
+    setModalConfig(true)
   }
 
   if (auth.loading) return null
 
   const renderPage = () => {
     if (!auth.user) return <HomePage auth={auth} />
-    
     switch(auth.user.rol) {
       case 2:
-      case 3: return <SupervisorPage auth={auth} mostrarToast={mostrarToast} />
+      case 3: return (
+        <SupervisorPage
+          auth={auth}
+          mostrarToast={mostrarToast}
+          modalRango={modalRango}
+          onCerrarRango={() => setModalRango(false)}
+        />
+      )
       case 1: return <ParticipantePage auth={auth} mostrarToast={mostrarToast} />
       default: return <HomePage auth={auth} />
     }
@@ -29,8 +51,26 @@ export default function App() {
 
   return (
     <>
-      <Header auth={auth} />
+      <Header
+        auth={auth}
+        onCrearRango={() => setModalRango(true)}
+        onUserConfig={abrirConfig}
+      />
       {renderPage()}
+      <ModalUserConfig
+        open={modalConfig}
+        config={config}
+        onClose={() => setModalConfig(false)}
+        onConfirm={async (data) => {
+          try {
+            await userConfigService.actualizar(data)
+            setModalConfig(false)
+            mostrarToast('Configuración guardada')
+          } catch {
+            mostrarToast('Error al guardar', 'error')
+          }
+        }}
+      />
       {toast && <Toast mensaje={toast.mensaje} tipo={toast.tipo} onClose={() => setToast(null)} />}
     </>
   )

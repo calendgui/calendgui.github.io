@@ -2,9 +2,13 @@ import { useState } from 'react'
 import { useAuth } from '../../hooks/useAuth'
 import './styles.css'
 
-type Props = { auth: ReturnType<typeof useAuth> }
+type Props = {
+  auth: ReturnType<typeof useAuth>
+  onCrearRango?: () => void
+  onUserConfig?: () => void
+}
 
-export function Header({ auth }: Props) {
+export function Header({ auth, onCrearRango, onUserConfig }: Props) {
   const [menuOpen, setMenuOpen] = useState(false)
   const { user, login, logout } = auth
 
@@ -42,8 +46,8 @@ export function Header({ auth }: Props) {
               <button className="nav-menu-item" onClick={() => setMenuOpen(false)}>Mis reservas</button>
               {(user.rol === 2 || user.rol === 3) && (
                 <>
-                  <button className="nav-menu-item" onClick={() => setMenuOpen(false)}>Crear rango</button>
-                  <button className="nav-menu-item" onClick={() => setMenuOpen(false)}>Mi configuración</button>
+                  <button className="nav-menu-item" onClick={() => { setMenuOpen(false); onCrearRango?.() }}>Crear rango</button>
+                  <button className="nav-menu-item" onClick={() => { setMenuOpen(false); onUserConfig?.() }}>Mi configuración</button>
                 </>
               )}
             </>

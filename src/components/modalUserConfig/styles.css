@@ -1,0 +1,87 @@
+.modal-card--lg { max-width: 32rem; }
+
+.config-dias {
+  display: flex;
+  flex-wrap: wrap;
+  gap: .5rem;
+  margin-bottom: 1rem;
+}
+
+.config-dia-btn {
+  padding: .4rem .875rem;
+  border-radius: 9999px;
+  border: 1.5px solid var(--color-border);
+  background: var(--color-surface);
+  font-size: .875rem;
+  color: var(--color-text-muted);
+  cursor: pointer;
+  transition: all .15s;
+}
+
+.config-dia-btn--activo {
+  background: var(--color-danger-bg);
+  border-color: var(--color-danger);
+  color: var(--color-danger);
+}
+
+.config-horas {
+  display: flex;
+  flex-wrap: wrap;
+  gap: .375rem;
+  margin-bottom: 1rem;
+}
+
+.config-hora-btn {
+  padding: .3rem .625rem;
+  border-radius: var(--radius-sm);
+  border: 1.5px solid var(--color-border);
+  background: var(--color-surface);
+  font-size: .8125rem;
+  color: var(--color-text-muted);
+  cursor: pointer;
+  transition: all .15s;
+}
+
+.config-hora-btn--activo {
+  background: var(--color-danger-bg);
+  border-color: var(--color-danger);
+  color: var(--color-danger);
+}
+
+.config-fecha-row {
+  display: flex;
+  gap: .5rem;
+  margin-bottom: .75rem;
+}
+
+.config-fecha-row .modal-select { margin-bottom: 0; }
+.config-fecha-row .modal-btn { flex: 0; padding: .75rem 1rem; }
+
+.config-fechas {
+  display: flex;
+  flex-wrap: wrap;
+  gap: .375rem;
+  margin-bottom: 1rem;
+}
+
+.config-fecha-chip {
+  display: flex;
+  align-items: center;
+  gap: .375rem;
+  padding: .3rem .625rem;
+  border-radius: 9999px;
+  background: var(--color-danger-bg);
+  border: 1.5px solid var(--color-danger);
+  color: var(--color-danger);
+  font-size: .8125rem;
+}
+
+.config-fecha-chip button {
+  background: none;
+  border: none;
+  cursor: pointer;
+  color: var(--color-danger);
+  font-size: .75rem;
+  padding: 0;
+  line-height: 1;
+}

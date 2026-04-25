@@ -21,6 +21,10 @@ export interface CrearSlotDTO {
   
 }
 
+export interface CrearRangoDTO {
+  
+}
+
 export interface SlotType {
   id: string
   nombre: string
@@ -32,4 +36,11 @@ export interface Spot {
   id: string
   nombre: string
   color: string
+}
+
+export interface UserConfig {
+  user_id: string
+  dias_bloqueados: number[]
+  horas_bloqueadas: string[]
+  fechas_bloqueadas: string[]
 }

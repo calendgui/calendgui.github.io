@@ -6,10 +6,11 @@ import { slotsService } from '../../services/slots.service'
 import { spotsService } from '../../services/spots.service'
 import { slotsTypeService } from '../../services/slotsType.service'
 import type { Slot, Spot, SlotType } from '../../types'
+import { ModalCrearRango } from '../../components/modalCrearRango'
 
 import './styles.css'
 
-export function SupervisorPage({ auth, mostrarToast }: any) {
+export function SupervisorPage({ auth, mostrarToast, modalRango, onCerrarRango }: any) {
   console.log(auth)
   const [slots, setSlots]               = useState<Slot[]>([])
   const [spots, setSpots]               = useState<Spot[]>([])
@@ -42,9 +43,8 @@ export function SupervisorPage({ auth, mostrarToast }: any) {
         spots={spots}
         spotsVisibles={spotsVisibles}
         onCeldaClick={(fecha, hora) => setModal({ fecha, hora })}
-        onSlotClick={(slot) => setSlotSeleccionado(slot)}   // ← reemplazá esta línea
+        onSlotClick={(slot) => setSlotSeleccionado(slot)}
         onSemanaCambia={(desde) => cargarSlots(desde)}
-        
       />
 
       <ModalCrearSlot
@@ -74,6 +74,23 @@ export function SupervisorPage({ auth, mostrarToast }: any) {
         onCrear={(fecha, hora) => { setSlotSeleccionado(null); setModal({ fecha, hora }) }}
         onLiberar={async (slot) => { await slotsService.liberar(slot.id); setSlotSeleccionado(null); cargarSlots(semanaDesde) }}
         onEliminar={async (slot) => { await slotsService.eliminar(slot.id); setSlotSeleccionado(null); cargarSlots(semanaDesde) }}
+      />
+
+      <ModalCrearRango
+        open={modalRango}
+        spots={spots}
+        slotTypes={slotTypes}
+        onClose={onCerrarRango}
+        onConfirm={async (data) => {
+          try {
+            await slotsService.crearRango(data)
+            onCerrarRango()
+            mostrarToast('Slots creados')
+            cargarSlots(semanaDesde)
+          } catch (e: any) {
+            mostrarToast(e.message, 'error')
+          }
+        }}
       />
     </div>
   )
