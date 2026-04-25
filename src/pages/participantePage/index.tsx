@@ -1,25 +1,28 @@
 import { useState, useEffect } from 'react'
 import { CalendarioMes } from '../../components/calendarioMes'
 import { PanelDia } from '../../components/panelDia'
+import { ModalReservar } from '../../components/modalReservar'
 import { slotsService } from '../../services/slots.service'
 import { spotsService } from '../../services/spots.service'
+import { reservationService } from '../../services/reservation.services'
 import type { Slot, Spot } from '../../types'
 import './styles.css'
 
 export function ParticipantePage({ auth, mostrarToast }: any) {
-  console.log(auth, mostrarToast)
-  const [slots, setSlots]   = useState<Slot[]>([])
-  const [spots, setSpots]   = useState<Spot[]>([])
-  const [fechaSel, setFechaSel] = useState<string | null>(null)
-  const [slotsDia, setSlotsDia] = useState<Slot[]>([])
+  const [slots, setSlots]               = useState<Slot[]>([])
+  const [spots, setSpots]               = useState<Spot[]>([])
+  const [fechaSel, setFechaSel]         = useState<string | null>(null)
+  const [slotsDia, setSlotsDia]         = useState<Slot[]>([])
+  const [slotAReservar, setSlotAReservar] = useState<Slot | null>(null)
+  const [mesActual, setMesActual]       = useState({ anho: new Date().getFullYear(), mes: new Date().getMonth() + 1 })
 
   useEffect(() => {
     spotsService.getAll().then(setSpots)
-    const hoy = new Date()
-    cargarSlots(hoy.getFullYear(), hoy.getMonth() + 1)
+    cargarSlots(mesActual.anho, mesActual.mes)
   }, [])
 
   async function cargarSlots(anho: number, mes: number) {
+    setMesActual({ anho, mes })
     const data = await slotsService.getPorMes(anho, mes)
     setSlots(data.filter(s => !s.estado))
   }
@@ -43,7 +46,25 @@ export function ParticipantePage({ auth, mostrarToast }: any) {
         slots={slotsDia}
         spots={spots}
         onCerrar={() => setFechaSel(null)}
-        onReservar={(slot) => console.log('reservar:', slot)}
+        onReservar={(slot) => setSlotAReservar(slot)}
+      />
+
+      <ModalReservar
+        open={!!slotAReservar}
+        slot={slotAReservar}
+        spots={spots}
+        onClose={() => setSlotAReservar(null)}
+        onConfirm={async (data) => {
+          try {
+            await reservationService.crear(data)
+            setSlotAReservar(null)
+            setFechaSel(null)
+            mostrarToast('Reserva confirmada')
+            cargarSlots(mesActual.anho, mesActual.mes)
+          } catch (e: any) {
+            mostrarToast(e.message, 'error')
+          }
+        }}
       />
     </div>
   )

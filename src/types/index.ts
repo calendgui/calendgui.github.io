@@ -3,6 +3,7 @@
 export interface Slot {
   id: string
   id_supervisor: string
+  nombre_supervisor?: string
   fecha: string
   hora: string
   id_spot: string
@@ -10,7 +11,7 @@ export interface Slot {
   duracion: number
   challenge: string | null
   estado: boolean
-  evaluado_id: string | null
+  numero_ci: string | null
   evaluado_mail: string | null
   evaluado_nombre: string | null
   batch: number | null
@@ -43,4 +44,14 @@ export interface UserConfig {
   dias_bloqueados: number[]
   horas_bloqueadas: string[]
   fechas_bloqueadas: string[]
+}
+
+export interface CrearReservation {
+
+}
+
+export interface Challenge {
+  id: string
+  etapa: string
+  nombre: string
 }

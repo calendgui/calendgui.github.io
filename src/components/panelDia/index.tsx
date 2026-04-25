@@ -40,8 +40,9 @@ export function PanelDia({ fecha, slots, spots, onCerrar, onReservar }: Props) {
                   onClick={() => onReservar(slot)}
                 >
                   <span className="panel-dia-slot-hora">{slot.hora}</span>
-                  <span className="panel-dia-slot-est">{spot?.nombre ?? slot.id_spot}</span>
                   <span className="panel-dia-slot-type">{slot.type}</span>
+                  <span className="panel-dia-slot-sup">{slot.nombre_supervisor}</span>
+                  <span className="panel-dia-slot-est">{spot?.nombre ?? slot.id_spot}</span>
                   <span className="panel-dia-slot-arrow">›</span>
                 </div>
               )
