@@ -1,0 +1,5 @@
+.supervisor-layout {
+  position: relative;
+  flex: 1;
+  height: calc(100vh - 5rem);
+}

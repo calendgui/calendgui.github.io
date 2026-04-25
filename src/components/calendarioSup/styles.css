@@ -8,9 +8,15 @@
 .cal-sup-nav {
   display: flex;
   align-items: center;
-  justify-content: space-between;
+  justify-content: center;
   padding: .75rem 0;
   flex-shrink: 0;
+}
+
+.cal-sup-nav-centro {
+  display: flex;
+  align-items: center;
+  gap: .5rem;
 }
 
 .cal-sup-nav-btn {

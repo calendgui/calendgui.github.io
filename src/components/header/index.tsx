@@ -2,13 +2,18 @@ import { useState } from 'react'
 import { useAuth } from '../../hooks/useAuth'
 import './styles.css'
 
+type Vista = 'supervisor' | 'participante'
+
 type Props = {
   auth: ReturnType<typeof useAuth>
   onCrearRango?: () => void
   onUserConfig?: () => void
+  onMisReservas?: () => void
+  onVistaSuper?: () => void
+  vista: Vista
 }
 
-export function Header({ auth, onCrearRango, onUserConfig }: Props) {
+export function Header({ auth, onCrearRango, onUserConfig, onMisReservas, onVistaSuper, vista }: Props) {
   const [menuOpen, setMenuOpen] = useState(false)
   const { user, login, logout } = auth
 
@@ -42,14 +47,24 @@ export function Header({ auth, onCrearRango, onUserConfig }: Props) {
                   <p className="nav-menu-email">{user.email}</p>
                 </div>
               </div>
-              <hr className="nav-menu-divider" />
-              <button className="nav-menu-item" onClick={() => setMenuOpen(false)}>Mis reservas</button>
-              {(user.rol === 2 || user.rol === 3) && (
-                <>
-                  <button className="nav-menu-item" onClick={() => { setMenuOpen(false); onCrearRango?.() }}>Crear rango</button>
-                  <button className="nav-menu-item" onClick={() => { setMenuOpen(false); onUserConfig?.() }}>Mi configuración</button>
-                </>
-              )}
+            {vista === 'participante' ? (
+              <>
+                <button className="nav-menu-item" onClick={() => { setMenuOpen(false); onMisReservas?.() }}>Mis reservas</button>
+                {(user.rol === 2 || user.rol === 3) && (
+                  <>
+                    <button className="nav-menu-item" onClick={() => { setMenuOpen(false); onVistaSuper?.() }}>Vista supervisor</button>
+                    <button className="nav-menu-item" onClick={() => { setMenuOpen(false); onCrearRango?.() }}>Crear rango</button>
+                    <button className="nav-menu-item" onClick={() => { setMenuOpen(false); onUserConfig?.() }}>Mi configuración</button>
+                  </>
+                )}
+              </>
+            ) : (
+              <>
+                <button className="nav-menu-item" onClick={() => { setMenuOpen(false); onMisReservas?.() }}>Calendario</button>
+                <button className="nav-menu-item" onClick={() => { setMenuOpen(false); onCrearRango?.() }}>Crear rango</button>
+                <button className="nav-menu-item" onClick={() => { setMenuOpen(false); onUserConfig?.() }}>Mi configuración</button>
+              </>
+            )}
             </>
           )}
         </div>

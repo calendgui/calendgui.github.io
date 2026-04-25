@@ -9,12 +9,15 @@ import { ModalUserConfig } from './components/modalUserConfig/index.tsx'
 import { userConfigService } from './services/userConfig.service.ts'
 import type { UserConfig } from './types/index.ts'
 
+type Vista = 'supervisor' | 'participante'
+
 export default function App() {
   const auth = useAuth()
-  const [toast, setToast] = useState<{ mensaje: string; tipo: 'ok' | 'error' } | null>(null)
+  const [toast, setToast]       = useState<{ mensaje: string; tipo: 'ok' | 'error' } | null>(null)
   const [modalRango, setModalRango] = useState(false)
   const [modalConfig, setModalConfig] = useState(false)
-  const [config, setConfig] = useState<UserConfig | null>(null)
+  const [config, setConfig]     = useState<UserConfig | null>(null)
+  const [vista, setVista] = useState<Vista>('participante')
 
   const mostrarToast = (mensaje: string, tipo: 'ok' | 'error' = 'ok') => {
     setToast({ mensaje, tipo })
@@ -34,27 +37,28 @@ export default function App() {
 
   const renderPage = () => {
     if (!auth.user) return <HomePage auth={auth} />
+
     switch(auth.user.rol) {
       case 2:
-      case 3: return (
-        <SupervisorPage
-          auth={auth}
-          mostrarToast={mostrarToast}
-          modalRango={modalRango}
-          onCerrarRango={() => setModalRango(false)}
-        />
-      )
-      case 1: return <ParticipantePage auth={auth} mostrarToast={mostrarToast} />
-      default: return <HomePage auth={auth} />
+      case 3: return vista === 'participante'
+        ? <ParticipantePage auth={auth} mostrarToast={mostrarToast} onVolver={() => setVista('supervisor')} />
+        : <SupervisorPage auth={auth} mostrarToast={mostrarToast} modalRango={modalRango} onCerrarRango={() => setModalRango(false)} />
+      case 1:
+        return <ParticipantePage auth={auth} mostrarToast={mostrarToast} />
+      default:
+        return <HomePage auth={auth} />
     }
   }
 
   return (
     <>
       <Header
+      vista={vista}
         auth={auth}
         onCrearRango={() => setModalRango(true)}
         onUserConfig={abrirConfig}
+        onMisReservas={() => setVista('participante')}
+        onVistaSuper={() => setVista('supervisor')}
       />
       {renderPage()}
       <ModalUserConfig

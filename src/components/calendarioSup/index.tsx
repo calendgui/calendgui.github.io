@@ -80,11 +80,13 @@ export function CalendarioSup({ slots, spots, spotsVisibles, onCeldaClick, onSlo
   return (
     <div className="cal-sup-wrapper">
 
-      <div className="cal-sup-nav">
+    <div className="cal-sup-nav">
+      <div className="cal-sup-nav-centro">
         <button className="cal-sup-nav-btn" onClick={() => setOffset(o => o - 1)}>‹</button>
         <span className="cal-sup-nav-label">{label}</span>
         <button className="cal-sup-nav-btn" onClick={() => setOffset(o => o + 1)}>›</button>
       </div>
+    </div>
 
       <div className="cal-sup-scroll">
         <div className="cal-sup-grid">
