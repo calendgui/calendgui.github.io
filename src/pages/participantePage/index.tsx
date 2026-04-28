@@ -9,6 +9,7 @@ import type { Slot, Spot } from '../../types'
 import './styles.css'
 
 export function ParticipantePage({ auth, mostrarToast }: any) {
+  console.log(auth)
   const [slots, setSlots]               = useState<Slot[]>([])
   const [spots, setSpots]               = useState<Spot[]>([])
   const [fechaSel, setFechaSel]         = useState<string | null>(null)
