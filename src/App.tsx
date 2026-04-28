@@ -8,6 +8,9 @@ import { Toast } from './components/toast/index.tsx'
 import { ModalUserConfig } from './components/modalUserConfig/index.tsx'
 import { userConfigService } from './services/userConfig.service.ts'
 import type { UserConfig } from './types/index.ts'
+import { ModalMisDatos } from './components/modalMisDatos/index.tsx'
+import { usersService } from './services/user.service.ts'
+
 
 type Vista = 'supervisor' | 'participante'
 
@@ -18,6 +21,7 @@ export default function App() {
   const [modalConfig, setModalConfig] = useState(false)
   const [config, setConfig]     = useState<UserConfig | null>(null)
   const [vista, setVista] = useState<Vista>('participante')
+  const [modalDatos, setModalDatos] = useState(false)
 
   const mostrarToast = (mensaje: string, tipo: 'ok' | 'error' = 'ok') => {
     setToast({ mensaje, tipo })
@@ -51,31 +55,45 @@ export default function App() {
   }
 
   return (
-    <>
-      <Header
+  <>
+    <Header
       vista={vista}
-        auth={auth}
-        onCrearRango={() => setModalRango(true)}
-        onUserConfig={abrirConfig}
-        onMisReservas={() => setVista('participante')}
-        onVistaSuper={() => setVista('supervisor')}
-      />
-      {renderPage()}
-      <ModalUserConfig
-        open={modalConfig}
-        config={config}
-        onClose={() => setModalConfig(false)}
-        onConfirm={async (data) => {
-          try {
-            await userConfigService.actualizar(data)
-            setModalConfig(false)
-            mostrarToast('Configuración guardada')
-          } catch {
-            mostrarToast('Error al guardar', 'error')
-          }
-        }}
-      />
-      {toast && <Toast mensaje={toast.mensaje} tipo={toast.tipo} onClose={() => setToast(null)} />}
-    </>
+      auth={auth}
+      onCrearRango={() => setModalRango(true)}
+      onUserConfig={abrirConfig}
+      onMisReservas={() => setVista('participante')}
+      onVistaSuper={() => setVista('supervisor')}
+      onMisDatos={() => setModalDatos(true)}
+    />
+    {renderPage()}
+    <ModalUserConfig
+      open={modalConfig}
+      config={config}
+      onClose={() => setModalConfig(false)}
+      onConfirm={async (data) => {
+        try {
+          await userConfigService.actualizar(data)
+          setModalConfig(false)
+          mostrarToast('Configuración guardada')
+        } catch {
+          mostrarToast('Error al guardar', 'error')
+        }
+      }}
+    />
+    <ModalMisDatos
+      open={modalDatos}
+      onClose={() => setModalDatos(false)}
+      onConfirm={async (data) => {
+        try {
+          await usersService.actualizarPerfil(data)
+          setModalDatos(false)
+          mostrarToast('Datos guardados')
+        } catch {
+          mostrarToast('Error al guardar', 'error')
+        }
+      }}
+    />
+    {toast && <Toast mensaje={toast.mensaje} tipo={toast.tipo} onClose={() => setToast(null)} />}
+  </>
   )
 }

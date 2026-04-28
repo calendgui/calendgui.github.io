@@ -1,20 +1,17 @@
-import { useEffect,useState } from 'react'
-import type { Slot, Spot } from '../../types'
+import { useEffect, useState } from 'react'
+import type { Slot, Spot, Challenge } from '../../types'
+import { chAllowedService } from '../../services/chAllowed.service'
 import '../ModalCrearSlot/styles.css'
-import type { Challenge } from '../../types'
-import { chAllowedService} from '../../services/chAllowed.service'
 
 interface Props {
   open: boolean
   slot: Slot | null
   spots: Spot[]
-  onConfirm: (data: { id_slot: string; numero_ci: string; batch: number; id_challenge: string }) => void
+  onConfirm: (data: { id_slot: string; id_challenge: string }) => void
   onClose: () => void
 }
 
 export function ModalReservar({ open, slot, spots, onConfirm, onClose }: Props) {
-  const [ci, setCi]       = useState('')
-  const [batch, setBatch] = useState('')
   const [challenges, setChallenges] = useState<Challenge[]>([])
   const [challenge, setChallenge]   = useState('')
 
@@ -68,27 +65,11 @@ export function ModalReservar({ open, slot, spots, onConfirm, onClose }: Props) 
           ))}
         </select>
 
-        <label className="modal-label">Número de CI</label>
-        <input
-          className="modal-select"
-          type="text"
-          value={ci}
-          onChange={e => setCi(e.target.value)}
-        />
-
-        <label className="modal-label">Batch</label>
-        <input
-          className="modal-select"
-          type="number"
-          value={batch}
-          onChange={e => setBatch(e.target.value)}
-        />
-
         <div className="modal-actions">
           <button className="modal-btn modal-btn--ghost" onClick={onClose}>Cancelar</button>
           <button
             className="modal-btn modal-btn--primary"
-            onClick={() => onConfirm({ id_slot: slot.id, numero_ci: ci, batch: parseInt(batch), id_challenge: challenge })}
+            onClick={() => onConfirm({ id_slot: slot.id, id_challenge: challenge })}
           >
             Confirmar
           </button>

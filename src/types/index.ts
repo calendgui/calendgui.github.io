@@ -55,3 +55,9 @@ export interface Challenge {
   etapa: string
   nombre: string
 }
+
+export interface Challenge {
+  id: string
+  etapa: string
+  nombre: string
+}
