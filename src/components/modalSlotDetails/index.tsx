@@ -65,10 +65,6 @@ export function ModalSlotDetails({ open, slot, spots, onClose, onCrear, onLibera
                 <span>{slot.evaluado_nombre}</span>
               </div>
               <div className="modal-slot-fila">
-                <span className="modal-slot-key">Email</span>
-                <span>{slot.evaluado_mail}</span>
-              </div>
-              <div className="modal-slot-fila">
                 <span className="modal-slot-key">Batch</span>
                 <span>{slot.batch}</span>
               </div>
