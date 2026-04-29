@@ -11,8 +11,7 @@ export interface Slot {
   duracion: number
   challenge: string | null
   estado: boolean
-  numero_ci: string | null
-  evaluado_mail: string | null
+  id_evaluado: string | null
   evaluado_nombre: string | null
   batch: number | null
   evento_id: string | null
