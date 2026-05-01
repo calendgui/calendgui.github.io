@@ -61,7 +61,6 @@ export default function App() {
       auth={auth}
       onCrearRango={() => setModalRango(true)}
       onUserConfig={abrirConfig}
-      onMisReservas={() => setVista('participante')}
       onVistaSuper={() => setVista('supervisor')}
       onMisDatos={() => setModalDatos(true)}
     />

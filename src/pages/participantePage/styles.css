@@ -3,3 +3,41 @@
   margin: 0 auto;
   padding: 1.5rem 1.375rem;
 }
+
+/* ── tabs ── */
+.participante-tabs {
+  display: flex;
+  gap: .25rem;
+  border-bottom: 1.5px solid var(--color-border);
+  margin-bottom: 1.25rem;
+}
+
+.participante-tab {
+  padding: .5rem .875rem;
+  font-size: .9375rem;
+  font-weight: 500;
+  color: var(--color-text-muted);
+  background: transparent;
+  border: none;
+  border-bottom: 2px solid transparent;
+  margin-bottom: -1.5px;
+  cursor: pointer;
+  transition: color .15s, border-color .15s;
+  -webkit-tap-highlight-color: transparent;
+}
+
+.participante-tab:hover {
+  color: var(--color-text);
+}
+
+.participante-tab.active {
+  color: var(--color-primary);
+  border-bottom-color: var(--color-primary);
+}
+
+/* ── desktop ── */
+@media (min-width: 1024px) {
+  .participante-page {
+    max-width: 720px;
+  }
+}

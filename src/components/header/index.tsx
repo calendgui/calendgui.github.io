@@ -8,13 +8,12 @@ type Props = {
   auth: ReturnType<typeof useAuth>
   onCrearRango?: () => void
   onUserConfig?: () => void
-  onMisReservas?: () => void
   onVistaSuper?: () => void
   onMisDatos?: () => void
   vista: Vista
 }
 
-export function Header({ auth, onCrearRango, onUserConfig, onMisReservas, onVistaSuper,onMisDatos, vista }: Props) {
+export function Header({ auth, onCrearRango, onUserConfig, onVistaSuper,onMisDatos, vista }: Props) {
   const [menuOpen, setMenuOpen] = useState(false)
   const { user, login, logout } = auth
 
@@ -50,7 +49,6 @@ export function Header({ auth, onCrearRango, onUserConfig, onMisReservas, onVist
               </div>
             {vista === 'participante' ? (
               <>
-                <button className="nav-menu-item" onClick={() => { setMenuOpen(false); onMisReservas?.() }}>Mis reservas</button>
                 <button className="nav-menu-item" onClick={() => { setMenuOpen(false); onMisDatos?.() }}>Mis datos</button>
                 {(user.rol === 2 || user.rol === 3) && (
                   <>
@@ -62,7 +60,6 @@ export function Header({ auth, onCrearRango, onUserConfig, onMisReservas, onVist
               </>
             ) : (
               <>
-                <button className="nav-menu-item" onClick={() => { setMenuOpen(false); onMisReservas?.() }}>Calendario</button>
                 <button className="nav-menu-item" onClick={() => { setMenuOpen(false); onMisDatos?.() }}>Mis datos</button>
                 <button className="nav-menu-item" onClick={() => { setMenuOpen(false); onCrearRango?.() }}>Crear rango</button>
                 <button className="nav-menu-item" onClick={() => { setMenuOpen(false); onUserConfig?.() }}>Mi configuración</button>

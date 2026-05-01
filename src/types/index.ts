@@ -60,3 +60,21 @@ export interface Challenge {
   etapa: string
   nombre: string
 }
+
+export interface Reservacion {
+  id: string
+  id_supervisor: string
+  fecha: string
+  hora: string
+  id_spot: string
+  type: string
+  duracion: number
+  evento_id: string
+  challenge: string
+  id_evaluado: string
+  estado: boolean
+  batch: number
+  evaluado_nombre: string
+  nombre_supervisor: string   // ← agregar
+}
+
