@@ -10,7 +10,7 @@
 .cal-nav {
   display: flex;
   align-items: center;
-  justify-content: space-between;
+  justify-content: center;
   margin-bottom: 1.25rem;
   gap: .5rem;
 }
@@ -45,7 +45,7 @@
   color: var(--color-text);
   letter-spacing: -.01em;
   text-align: center;
-  flex: 1;
+  flex: unset;
 }
 
 /* ── cabecera días ── */

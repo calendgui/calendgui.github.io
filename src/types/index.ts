@@ -78,3 +78,8 @@ export interface Reservacion {
   nombre_supervisor: string   // ← agregar
 }
 
+export interface Anuncio {
+  id: string
+  titulo: string
+  img_url: string
+}

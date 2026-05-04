@@ -10,7 +10,7 @@ import { slotsTypeService } from '../../services/slotsType.service'
 import type { Slot, Spot, SlotType } from '../../types'
 import './styles.css'
 
-export function SupervisorPage({ auth, mostrarToast, modalRango, onCerrarRango }: any) {
+export function SupervisorPage({  mostrarToast, modalRango, onCerrarRango }: any) {
   const [slots, setSlots]                       = useState<Slot[]>([])
   const [spots, setSpots]                       = useState<Spot[]>([])
   const [spotsVisibles, setSpotsVisibles]       = useState<Set<string>>(new Set())

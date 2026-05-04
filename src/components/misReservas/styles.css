@@ -15,7 +15,8 @@
 .mis-reservas-nav {
   display: flex;
   align-items: center;
-  justify-content: space-between;
+  justify-content: center;
+  gap: .5rem;
 }
 
 .mis-reservas-nav span {
@@ -23,6 +24,7 @@
   font-weight: 600;
   color: var(--color-text);
   letter-spacing: -.01em;
+  flex: unset;
 }
 
 .mis-reservas-nav button {

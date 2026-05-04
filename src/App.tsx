@@ -12,7 +12,8 @@ import { ModalMisDatos } from './components/modalMisDatos/index.tsx'
 import { usersService } from './services/user.service.ts'
 
 
-type Vista = 'supervisor' | 'participante'
+type Vista = 'supervisor' | 'participante' | 'home'
+
 
 export default function App() {
   const auth = useAuth()
@@ -20,7 +21,7 @@ export default function App() {
   const [modalRango, setModalRango] = useState(false)
   const [modalConfig, setModalConfig] = useState(false)
   const [config, setConfig]     = useState<UserConfig | null>(null)
-  const [vista, setVista] = useState<Vista>('participante')
+  const [vista, setVista] = useState<Vista>('home')
   const [tabParticipante, setTabParticipante] = useState<'agendar' | 'mis-reservas'>('agendar')
   const [modalDatos, setModalDatos] = useState(false)
 
@@ -41,7 +42,8 @@ export default function App() {
   if (auth.loading) return null
 
   const renderPage = () => {
-    if (!auth.user) return <HomePage auth={auth} />
+    if (!auth.user || vista === 'home') return <HomePage auth={auth} onIrCalendario={() => setVista('participante')} onIrSupervisor={() => setVista('supervisor')} />
+    
 
     switch(auth.user.rol) {
       case 2:
@@ -65,6 +67,7 @@ export default function App() {
       onVistaSuper={() => setVista('supervisor')}
       onMisReservas={() => { setTabParticipante('agendar'); setVista('participante') }}
       onMisDatos={() => setModalDatos(true)}
+      onHome={() => setVista('home')}
     />
     {renderPage()}
     <ModalUserConfig

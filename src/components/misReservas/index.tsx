@@ -9,7 +9,7 @@ interface Props {
   mostrarToast: (msg: string, tipo?: string) => void
 }
 
-export function MisReservas({ spots, mostrarToast }: Props) {
+export function MisReservas({ spots }: Props) {
   const hoy = new Date()
   const [anho, setAnho] = useState(hoy.getFullYear())
   const [mes, setMes]   = useState(hoy.getMonth() + 1)

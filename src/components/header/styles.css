@@ -185,3 +185,23 @@
 
 .nav-menu-item-danger { color: var(--color-danger) !important; }
 .nav-menu-item-danger:hover { color: #dc2626 !important; }
+
+
+.nav-brand {
+  background: none;
+  border: none;
+  padding: 0;
+  margin: 0;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  -webkit-tap-highlight-color: transparent;
+}
+
+.nav-brand:focus {
+  outline: none;
+}
+
+.nav-brand:active {
+  transform: scale(0.98); /* opcional */
+}
