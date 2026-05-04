@@ -2,9 +2,16 @@
 import { apiFetch } from './api'
 import type { Anuncio } from '../types'
 
+const BASE = import.meta.env.VITE_API_URL
+
 export const announcementsService = {
-  getAll: () =>
-    apiFetch<Anuncio[]>('/announcements'),
+  getAll: async (): Promise<Anuncio[]> => {
+    const res = await fetch(`${BASE}/announcements`, {
+      headers: { 'Content-Type': 'application/json' }
+    })
+    if (!res.ok) throw new Error(`API error ${res.status}`)
+    return res.json()
+  },
 
   crear: (data: { titulo: string; img_url: string }) =>
     apiFetch<{ ok: boolean; id: string }>('/announcements', {
