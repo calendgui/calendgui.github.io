@@ -21,6 +21,7 @@ export default function App() {
   const [modalConfig, setModalConfig] = useState(false)
   const [config, setConfig]     = useState<UserConfig | null>(null)
   const [vista, setVista] = useState<Vista>('participante')
+  const [tabParticipante, setTabParticipante] = useState<'agendar' | 'mis-reservas'>('agendar')
   const [modalDatos, setModalDatos] = useState(false)
 
   const mostrarToast = (mensaje: string, tipo: 'ok' | 'error' = 'ok') => {
@@ -45,7 +46,7 @@ export default function App() {
     switch(auth.user.rol) {
       case 2:
       case 3: return vista === 'participante'
-        ? <ParticipantePage auth={auth} mostrarToast={mostrarToast} onVolver={() => setVista('supervisor')} />
+        ? <ParticipantePage auth={auth} mostrarToast={mostrarToast} onVolver={() => setVista('supervisor')} tab={tabParticipante} onTabChange={setTabParticipante} />
         : <SupervisorPage auth={auth} mostrarToast={mostrarToast} modalRango={modalRango} onCerrarRango={() => setModalRango(false)} />
       case 1:
         return <ParticipantePage auth={auth} mostrarToast={mostrarToast} />
@@ -62,6 +63,7 @@ export default function App() {
       onCrearRango={() => setModalRango(true)}
       onUserConfig={abrirConfig}
       onVistaSuper={() => setVista('supervisor')}
+      onMisReservas={() => { setTabParticipante('agendar'); setVista('participante') }}
       onMisDatos={() => setModalDatos(true)}
     />
     {renderPage()}

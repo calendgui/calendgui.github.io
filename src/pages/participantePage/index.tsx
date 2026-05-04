@@ -9,14 +9,13 @@ import { MisReservas } from '../../components/misReservas'
 import type { Slot, Spot } from '../../types'
 import './styles.css'
 
-export function ParticipantePage({ auth, mostrarToast }: any) {
+export function ParticipantePage({ mostrarToast, tab = 'agendar', onTabChange }: any) {
   const [slots, setSlots]               = useState<Slot[]>([])
   const [spots, setSpots]               = useState<Spot[]>([])
   const [fechaSel, setFechaSel]         = useState<string | null>(null)
   const [slotsDia, setSlotsDia]         = useState<Slot[]>([])
   const [slotAReservar, setSlotAReservar] = useState<Slot | null>(null)
   const [mesActual, setMesActual]       = useState({ anho: new Date().getFullYear(), mes: new Date().getMonth() + 1 })
-  const [tab, setTab]                   = useState<'agendar' | 'mis-reservas'>('agendar')
 
   useEffect(() => {
     spotsService.getAll().then(setSpots)
@@ -35,13 +34,13 @@ export function ParticipantePage({ auth, mostrarToast }: any) {
       <div className="participante-tabs">
         <button
           className={`participante-tab ${tab === 'agendar' ? 'active' : ''}`}
-          onClick={() => setTab('agendar')}
+          onClick={() => onTabChange('agendar')}
         >
           Agendar
         </button>
         <button
           className={`participante-tab ${tab === 'mis-reservas' ? 'active' : ''}`}
-          onClick={() => setTab('mis-reservas')}
+          onClick={() => onTabChange('mis-reservas')}
         >
           Mis reservas
         </button>

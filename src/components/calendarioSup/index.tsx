@@ -7,6 +7,8 @@ const MESES = ['Enero','Febrero','Marzo','Abril','Mayo','Junio','Julio','Agosto'
 const HORA_HEIGHT = 64 // px por hora
 const TOTAL_HEIGHT = 24 * HORA_HEIGHT
 const HORAS = Array.from({ length: 24 }, (_, i) => `${String(i).padStart(2, '0')}:00`)
+const ES_MOBILE = window.innerWidth < 640
+const COLS = ES_MOBILE ? 3 : 7
 
 interface Props {
   slots: Slot[]
@@ -41,14 +43,19 @@ function toFechaStr(date: Date) {
   return `${date.getFullYear()}-${String(date.getMonth() + 1).padStart(2, '0')}-${String(date.getDate()).padStart(2, '0')}`
 }
 
-function getSemana(offset: number) {
+function getSemana(offset: number, mobile: boolean) {
+  const largo = mobile ? 3 : 7
   const hoy = new Date()
-  const domingo = new Date(hoy)
-  domingo.setDate(hoy.getDate() - hoy.getDay() + offset * 7)
-  domingo.setHours(0, 0, 0, 0)
-  return Array.from({ length: 7 }, (_, i) => {
-    const d = new Date(domingo)
-    d.setDate(domingo.getDate() + i)
+  const inicio = new Date(hoy)
+  if (mobile) {
+    inicio.setDate(hoy.getDate() + offset * 3)
+  } else {
+    inicio.setDate(hoy.getDate() - hoy.getDay() + offset * 7)
+  }
+  inicio.setHours(0, 0, 0, 0)
+  return Array.from({ length: largo }, (_, i) => {
+    const d = new Date(inicio)
+    d.setDate(inicio.getDate() + i)
     return d
   })
 }
@@ -60,11 +67,11 @@ function horaAMinutos(hora: string) {
 
 export function CalendarioSup({ slots, spots, spotsVisibles, onCeldaClick, onSlotClick, onSemanaCambia }: Props) {
   const [offset, setOffset] = useState(0)
-  const dias = useMemo(() => getSemana(offset), [offset])
+  const dias = useMemo(() => getSemana(offset, ES_MOBILE), [offset])
   const hoy = new Date().toDateString()
 
   useEffect(() => {
-    onSemanaCambia(toFechaStr(dias[0]), toFechaStr(dias[6]))
+    onSemanaCambia(toFechaStr(dias[0]), toFechaStr(dias[dias.length - 1]))
   }, [offset])
 
   function handleColumnClick(e: React.MouseEvent<HTMLDivElement>, fechaStr: string) {
@@ -89,7 +96,7 @@ export function CalendarioSup({ slots, spots, spotsVisibles, onCeldaClick, onSlo
     </div>
 
       <div className="cal-sup-scroll">
-        <div className="cal-sup-grid">
+        <div className="cal-sup-grid" style={{ gridTemplateColumns: `3.5rem repeat(${COLS}, 1fr)` }}>
 
           {/* cabecera */}
           <div className="cal-sup-corner" />

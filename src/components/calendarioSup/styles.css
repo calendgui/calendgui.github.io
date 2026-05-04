@@ -54,6 +54,13 @@
   min-width: 600px;
 }
 
+@media (max-width: 639px) {
+  .cal-sup-grid {
+    grid-template-columns: 3.5rem repeat(3, 1fr);
+    min-width: 0;
+  }
+}
+
 /* cabecera */
 .cal-sup-corner {
   position: sticky;

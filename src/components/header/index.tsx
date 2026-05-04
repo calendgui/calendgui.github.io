@@ -9,11 +9,12 @@ type Props = {
   onCrearRango?: () => void
   onUserConfig?: () => void
   onVistaSuper?: () => void
+  onMisReservas?: () => void
   onMisDatos?: () => void
   vista: Vista
 }
 
-export function Header({ auth, onCrearRango, onUserConfig, onVistaSuper,onMisDatos, vista }: Props) {
+export function Header({ auth, onCrearRango, onUserConfig, onVistaSuper, onMisReservas, onMisDatos, vista }: Props) {
   const [menuOpen, setMenuOpen] = useState(false)
   const { user, login, logout } = auth
 
@@ -47,29 +48,23 @@ export function Header({ auth, onCrearRango, onUserConfig, onVistaSuper,onMisDat
                   <p className="nav-menu-email">{user.email}</p>
                 </div>
               </div>
-            {vista === 'participante' ? (
-              <>
-                <button className="nav-menu-item" onClick={() => { setMenuOpen(false); onMisDatos?.() }}>Mis datos</button>
-                {(user.rol === 2 || user.rol === 3) && (
-                  <>
+              {vista === 'participante' ? (
+                <>
+                  <button className="nav-menu-item" onClick={() => { setMenuOpen(false); onMisDatos?.() }}>Mis datos</button>
+                  {(user.rol === 2 || user.rol === 3) && (
                     <button className="nav-menu-item" onClick={() => { setMenuOpen(false); onVistaSuper?.() }}>Vista supervisor</button>
-                    <button className="nav-menu-item" onClick={() => { setMenuOpen(false); onCrearRango?.() }}>Crear rango</button>
-                    <button className="nav-menu-item" onClick={() => { setMenuOpen(false); onUserConfig?.() }}>Mi configuración</button>
-                  </>
-                )}
-              </>
-            ) : (
-              <>
-                <button className="nav-menu-item" onClick={() => { setMenuOpen(false); onMisDatos?.() }}>Mis datos</button>
-                <button className="nav-menu-item" onClick={() => { setMenuOpen(false); onCrearRango?.() }}>Crear rango</button>
-                <button className="nav-menu-item" onClick={() => { setMenuOpen(false); onUserConfig?.() }}>Mi configuración</button>
-              </>
-            )}
+                  )}
+                </>
+              ) : (
+                <>
+                  <button className="nav-menu-item" onClick={() => { setMenuOpen(false); onMisDatos?.() }}>Mis datos</button>
+                  <button className="nav-menu-item" onClick={() => { setMenuOpen(false); onMisReservas?.() }}>Vista calendario</button>
+                  <button className="nav-menu-item" onClick={() => { setMenuOpen(false); onCrearRango?.() }}>Crear rango</button>
+                  <button className="nav-menu-item" onClick={() => { setMenuOpen(false); onUserConfig?.() }}>Mi configuración</button>
+                </>
+              )}
             </>
           )}
-        </div>
-
-        <div className="nav-menu-footer">
           {!user
             ? <button className="nav-menu-item" onClick={() => { login(); setMenuOpen(false) }}>Iniciar sesión con Google</button>
             : <button className="nav-menu-item nav-menu-item-danger" onClick={() => { logout(); setMenuOpen(false) }}>Cerrar sesión</button>
