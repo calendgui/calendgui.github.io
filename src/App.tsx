@@ -51,7 +51,7 @@ export default function App() {
         ? <ParticipantePage auth={auth} mostrarToast={mostrarToast} onVolver={() => setVista('supervisor')} tab={tabParticipante} onTabChange={setTabParticipante} />
         : <SupervisorPage auth={auth} mostrarToast={mostrarToast} modalRango={modalRango} onCerrarRango={() => setModalRango(false)} />
       case 1:
-        return <ParticipantePage auth={auth} mostrarToast={mostrarToast} />
+        return <ParticipantePage auth={auth} mostrarToast={mostrarToast} tab={tabParticipante} onTabChange={setTabParticipante} />
       default:
         return <HomePage auth={auth} />
     }
