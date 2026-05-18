@@ -10,7 +10,7 @@ import { slotsTypeService } from '../../services/slotsType.service'
 import type { Slot, Spot, SlotType } from '../../types'
 import './styles.css'
 
-export function SupervisorPage({  mostrarToast, modalRango, onCerrarRango }: any) {
+export function SupervisorPage({ mostrarToast, modalRango, onCerrarRango }: any) {
   const [slots, setSlots]                       = useState<Slot[]>([])
   const [spots, setSpots]                       = useState<Spot[]>([])
   const [spotsVisibles, setSpotsVisibles]       = useState<Set<string>>(new Set())
@@ -18,6 +18,7 @@ export function SupervisorPage({  mostrarToast, modalRango, onCerrarRango }: any
   const [modal, setModal]                       = useState<{ fecha: string; hora: string } | null>(null)
   const [slotSeleccionado, setSlotSeleccionado] = useState<Slot | null>(null)
   const [semanaDesde, setSemanaDesde]           = useState('')
+  const [semanaHasta, setSemanaHasta]           = useState('')
   const [verTodos, setVerTodos]                 = useState(false)
 
   useEffect(() => {
@@ -28,20 +29,30 @@ export function SupervisorPage({  mostrarToast, modalRango, onCerrarRango }: any
     slotsTypeService.getAll().then(setSlotTypes)
   }, [])
 
-  async function cargarSlots(desde: string, todos = verTodos) {
+  async function cargarSlots(desde: string, hasta: string, todos = verTodos) {
     setSemanaDesde(desde)
-    const anho = parseInt(desde.slice(0, 4))
-    const mes  = parseInt(desde.slice(5, 7))
-    const data = todos
-      ? await slotsService.getPorMes(anho, mes)
-      : await slotsService.getMios(anho, mes)
-    setSlots(data)
+    setSemanaHasta(hasta)
+
+    const anhoDesde = parseInt(desde.slice(0, 4))
+    const mesDesde  = parseInt(desde.slice(5, 7))
+    const anhoHasta = parseInt(hasta.slice(0, 4))
+    const mesHasta  = parseInt(hasta.slice(5, 7))
+
+    const fetchFn = todos ? slotsService.getPorMes : slotsService.getMios
+    const cruzaMes = anhoDesde !== anhoHasta || mesDesde !== mesHasta
+
+    const [data1, data2] = await Promise.all([
+      fetchFn(anhoDesde, mesDesde),
+      cruzaMes ? fetchFn(anhoHasta, mesHasta) : Promise.resolve([]),
+    ])
+
+    setSlots([...data1, ...data2])
   }
 
   const toggleVerTodos = () => {
     const nuevo = !verTodos
     setVerTodos(nuevo)
-    cargarSlots(semanaDesde, nuevo)
+    cargarSlots(semanaDesde, semanaHasta, nuevo)
   }
 
   const toggleSpot = (id: string) => {
@@ -68,7 +79,7 @@ export function SupervisorPage({  mostrarToast, modalRango, onCerrarRango }: any
           spotsVisibles={spotsVisibles}
           onCeldaClick={(fecha, hora) => setModal({ fecha, hora })}
           onSlotClick={(slot) => setSlotSeleccionado(slot)}
-          onSemanaCambia={(desde) => cargarSlots(desde)}
+          onSemanaCambia={(desde, hasta) => cargarSlots(desde, hasta)}
         />
       </div>
 
@@ -84,7 +95,7 @@ export function SupervisorPage({  mostrarToast, modalRango, onCerrarRango }: any
             await slotsService.crear(data)
             setModal(null)
             mostrarToast('Slot creado')
-            cargarSlots(semanaDesde)
+            cargarSlots(semanaDesde, semanaHasta)
           } catch (e: any) {
             mostrarToast(e.message, 'error')
           }
@@ -102,7 +113,7 @@ export function SupervisorPage({  mostrarToast, modalRango, onCerrarRango }: any
             await slotsService.liberar(slot.id)
             setSlotSeleccionado(null)
             mostrarToast('Slot liberado')
-            cargarSlots(semanaDesde)
+            cargarSlots(semanaDesde, semanaHasta)
           } catch (e: any) {
             mostrarToast(e.message, 'error')
           }
@@ -112,7 +123,7 @@ export function SupervisorPage({  mostrarToast, modalRango, onCerrarRango }: any
             await slotsService.eliminar(slot.id)
             setSlotSeleccionado(null)
             mostrarToast('Slot eliminado')
-            cargarSlots(semanaDesde)
+            cargarSlots(semanaDesde, semanaHasta)
           } catch (e: any) {
             mostrarToast(e.message, 'error')
           }
@@ -129,13 +140,12 @@ export function SupervisorPage({  mostrarToast, modalRango, onCerrarRango }: any
             await slotsService.crearRango(data)
             onCerrarRango()
             mostrarToast('Slots creados')
-            cargarSlots(semanaDesde)
+            cargarSlots(semanaDesde, semanaHasta)
           } catch (e: any) {
             mostrarToast(e.message, 'error')
           }
         }}
       />
-
     </div>
   )
 }
